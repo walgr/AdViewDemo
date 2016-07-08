@@ -3,9 +3,7 @@ package com.wpf.adviewdemo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.socks.library.KLog;
 import com.wpf.adview.AdView;
-import com.wpf.adviewpdemo.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,11 +32,9 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onPageSelected(int position) {
-        KLog.e(position);
     }
 
     @Override
     public void onClick(int position) {
-        KLog.e(position);
     }
 }
