@@ -11,8 +11,8 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.wpf.adview.Adapter.AdAdapter;
-import com.wpf.adviewpager.R;
 import com.wpf.adview.View.DotView;
+import com.wpf.adviewpager.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +32,7 @@ public class AdView extends FrameLayout {
     private OnItemClickListener onItemClickListener;
     private AdView.OnPageChangeListener onPageChangeListener;
     private int delayTime = 3000;
+    private Timer timer = new Timer();
 
     private Handler handler = new Handler() {
         @Override
@@ -40,6 +41,7 @@ public class AdView extends FrameLayout {
             if(msg.what == 0x01) viewPager.setCurrentItem(viewPager.getCurrentItem()+1);
         }
     };
+    private boolean isTouched;
 
     public AdView(Context context) {
         this(context,(AttributeSet)null);
@@ -89,18 +91,15 @@ public class AdView extends FrameLayout {
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
+                isTouched = state!=0;
             }
         });
         addView(view);
-
         TimerTask timeTask = new TimerTask() {
             @Override
-            public void run() {
-                handler.sendEmptyMessage(0x01);
+            public void run() {if(!isTouched) handler.sendEmptyMessage(0x01);
             }
         };
-        Timer timer = new Timer();
         timer.schedule(timeTask,delayTime,delayTime);
     }
 
