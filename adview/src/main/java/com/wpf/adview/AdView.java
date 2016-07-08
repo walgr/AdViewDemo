@@ -85,8 +85,7 @@ public class AdView extends FrameLayout {
             public void onPageSelected(int position) {
                 curPosition = AdAdapter.getCurPosition(position,adUrlList.size());
                 dotView.setCurPosition(curPosition);
-                if(onPageChangeListener != null)
-                    onPageChangeListener.onPageSelected(curPosition);
+                if(onPageChangeListener != null) onPageChangeListener.onPageSelected(curPosition);
             }
 
             @Override

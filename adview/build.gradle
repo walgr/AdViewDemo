@@ -28,7 +28,7 @@ dependencies {
 }
 
 
-version = "1.0"
+version = "1.2"
 group = "com.wpf.adview"
 def siteUrl = 'https://github.com/wazsj/AdViewDemo'
 def gitUrl = 'https://github.com/wazsj/AdViewDemo.git'

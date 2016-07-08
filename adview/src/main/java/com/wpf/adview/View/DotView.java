@@ -1,5 +1,6 @@
 package com.wpf.adview.View;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -17,10 +18,11 @@ import java.util.List;
 
 public class DotView extends View {
 
-    private int width,height,dotRadius;
+    private int width,height,dotRadius,curDotRadius,oldDotRadius;
     private List<float[]> points = new ArrayList<>();
     private int allPoint,curPosition = 0;
     private Paint mPaint;
+    private ValueAnimator valueAnimator;
 
     public DotView(Context context) {
         this(context,null);
@@ -44,12 +46,24 @@ public class DotView extends View {
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(final Canvas canvas) {
         super.onDraw(canvas);
         if(width == 0) {
             width = getWidth();
             height = getHeight();
             dotRadius = height/4;
+            curDotRadius = dotRadius*3/2;
+            oldDotRadius = dotRadius;
+            valueAnimator = ValueAnimator.ofInt(dotRadius,dotRadius*3/2);
+            valueAnimator.setDuration(200);
+            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    curDotRadius = (int)valueAnimator.getAnimatedValue();
+                    oldDotRadius = dotRadius*3/2 - (curDotRadius-dotRadius);
+                    invalidate();
+                }
+            });
             if(dotRadius*(3*allPoint+1) > width)
                 dotRadius = width/(3*allPoint+1);
             int dotSpace = 2 * dotRadius;
@@ -66,8 +80,19 @@ public class DotView extends View {
     private void drawDot(Canvas canvas) {
         for(int i=0;i<allPoint;++i) {
             float[] point = points.get(i);
-            canvas.drawCircle(point[0],point[1],(i==curPosition)?(int)(dotRadius*1.5):dotRadius,mPaint);
+            if(i==getLastPosition(curPosition))
+                canvas.drawCircle(point[0],point[1],oldDotRadius, mPaint);
+            else if(i == curPosition)
+                canvas.drawCircle(point[0],point[1],curDotRadius, mPaint);
+            else
+                canvas.drawCircle(point[0],point[1],dotRadius, mPaint);
         }
+    }
+
+    private int getLastPosition(int position) {
+        if(position-1 == -1)
+            return allPoint-1;
+        return position-1;
     }
 
     public void setPointNum(int pointNum) {
@@ -78,6 +103,7 @@ public class DotView extends View {
 
     public void setCurPosition(int curPosition) {
         this.curPosition = curPosition;
+        if(valueAnimator != null && allPoint != 1) valueAnimator.start();
         invalidate();
     }
 }
