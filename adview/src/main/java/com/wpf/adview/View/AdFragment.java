@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.wpf.adview.AdView;
 import com.wpf.adviewpager.R;
 
@@ -49,7 +50,9 @@ public class AdFragment extends Fragment implements
         adUrl = getArguments().getString("AdUrl");
         assert adUrl != null && !adUrl.isEmpty();
         ImageView imageView = (ImageView) view;
-        Glide.with(getActivity()).load(adUrl).into(imageView);
+        Glide.with(getActivity()).load(adUrl)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(imageView);
         imageView.setOnClickListener(this);
     }
 
