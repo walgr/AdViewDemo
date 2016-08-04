@@ -56,11 +56,13 @@ public class AdView extends FrameLayout {
         setAdUrlList(adUrlList);
     }
 
-//    @Override
-//    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-//        int height = widthMeasureSpec*9/16;
-//        super.onMeasure(widthMeasureSpec,height);
-//    }
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+        heightMeasureSpec = MeasureSpec.makeMeasureSpec(widthSize*9/16,heightMode);
+        super.onMeasure(widthMeasureSpec,heightMeasureSpec);
+    }
 
     private void init() {
         View view = LayoutInflater.from(getContext())
