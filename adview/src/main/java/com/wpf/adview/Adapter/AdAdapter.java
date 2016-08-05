@@ -21,6 +21,7 @@ public class AdAdapter extends FragmentPagerAdapter {
     public static int max = 10000001;
     private List<String> adUrlList = new ArrayList<>();
     private AdView.OnItemClickListener onItemClickListener;
+    private AdView.OnResourceReady onResourceReady;
 
     public AdAdapter(FragmentManager fm,@NonNull List<String> adUrlList) {
         super(fm);
@@ -30,7 +31,9 @@ public class AdAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         position = getCurPosition(position,adUrlList.size());
-        return AdFragment.newInstance(position,adUrlList.get(position)).setOnItemClickListener(onItemClickListener);
+        return AdFragment.newInstance(position,adUrlList.get(position))
+                .setOnResourceReady(onResourceReady)
+                .setOnItemClickListener(onItemClickListener);
     }
 
     public static int getCurPosition(int position, int adUrlListSize) {
@@ -53,6 +56,11 @@ public class AdAdapter extends FragmentPagerAdapter {
 
     public AdAdapter setOnItemClickListener(AdView.OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
+        return this;
+    }
+
+    public AdAdapter setOnResourceReady(AdView.OnResourceReady onResourceReady) {
+        this.onResourceReady = onResourceReady;
         return this;
     }
 }

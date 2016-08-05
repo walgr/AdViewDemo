@@ -11,7 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.wpf.adview.AdView;
 import com.wpf.adviewpager.R;
 
@@ -26,6 +28,7 @@ public class AdFragment extends Fragment implements
     private int position;
     private String adUrl;
     private AdView.OnItemClickListener onItemClickListener;
+    private AdView.OnResourceReady onResourceReady;
 
     public static AdFragment newInstance(int position,String adUrl) {
         AdFragment adFragment = new AdFragment();
@@ -51,7 +54,21 @@ public class AdFragment extends Fragment implements
         assert adUrl != null && !adUrl.isEmpty();
         ImageView imageView = (ImageView) view;
         Glide.with(getActivity()).load(adUrl)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                .placeholder(R.mipmap.loading)
+//                .crossFade()
+                .listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        if(onResourceReady != null) onResourceReady.onResourceReady(position);
+                        return false;
+                    }
+                })
+//                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(imageView);
         imageView.setOnClickListener(this);
     }
@@ -63,6 +80,11 @@ public class AdFragment extends Fragment implements
 
     public AdFragment setOnItemClickListener(AdView.OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
+        return this;
+    }
+
+    public AdFragment setOnResourceReady(AdView.OnResourceReady onResourceReady) {
+        this.onResourceReady = onResourceReady;
         return this;
     }
 }

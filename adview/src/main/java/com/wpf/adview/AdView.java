@@ -9,6 +9,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.wpf.adview.Adapter.AdAdapter;
 import com.wpf.adview.View.DotView;
@@ -26,13 +27,15 @@ import java.util.TimerTask;
 
 public class AdView extends FrameLayout {
 
-    private List<String> adUrlList = new ArrayList<>();
-    private int curPosition = 0;
     private ViewPager viewPager;
+    private TextView title;
     private OnItemClickListener onItemClickListener;
-    private AdView.OnPageChangeListener onPageChangeListener;
+    private OnPageChangeListener onPageChangeListener;
+    private List<String> adUrlList = new ArrayList<>();
+    private List<String> titleList = new ArrayList<>();
+    private StringBuilder sb = new StringBuilder();
+    private int curPosition = 0;
     private int delayTime = 3000;
-    private Timer timer = new Timer();
 
     private Handler handler = new Handler() {
         @Override
@@ -64,19 +67,17 @@ public class AdView extends FrameLayout {
         super.onMeasure(widthMeasureSpec,heightMeasureSpec);
     }
 
-    private void init() {
+    public void start() {
         View view = LayoutInflater.from(getContext())
                 .inflate(R.layout.adview,this,false);
         viewPager = (ViewPager) view.findViewById(R.id.viewPager);
+        title = (TextView) view.findViewById(R.id.title);
         final DotView dotView = (DotView) view.findViewById(R.id.dorView);
-        AdAdapter adAdapter = new AdAdapter(((AppCompatActivity)getContext())
+        dotView.setPointNum(adUrlList.size());
+        dotView.setCurPosition(curPosition);
+        final AdAdapter adAdapter = new AdAdapter(((AppCompatActivity)getContext())
                         .getSupportFragmentManager(), adUrlList);
         viewPager.setAdapter(adAdapter);
-        viewPager.setCurrentItem(AdAdapter.max/2,false);
-        adAdapter.setOnItemClickListener(onItemClickListener);
-
-        dotView.setCurPosition(curPosition);
-        dotView.setPointNum(adUrlList.size());
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -87,6 +88,9 @@ public class AdView extends FrameLayout {
             public void onPageSelected(int position) {
                 curPosition = AdAdapter.getCurPosition(position,adUrlList.size());
                 dotView.setCurPosition(curPosition);
+                dotView.setOldPosition(curPosition);
+                if(!sb.toString().contains(curPosition+"")) dotView.show(); else dotView.stopShow();
+                if(titleList.size()>=curPosition) title.setText(titleList.get(curPosition));
                 if(onPageChangeListener != null) onPageChangeListener.onPageSelected(curPosition);
             }
 
@@ -95,18 +99,44 @@ public class AdView extends FrameLayout {
                 isTouched = state!=0;
             }
         });
-        addView(view);
-        TimerTask timeTask = new TimerTask() {
+        viewPager.setCurrentItem(AdAdapter.max/2,false);
+        adAdapter.setOnItemClickListener(onItemClickListener);
+        adAdapter.setOnResourceReady(new OnResourceReady() {
             @Override
-            public void run() {if(!isTouched) handler.sendEmptyMessage(0x01);
+            public void onResourceReady(int position) {
+                if(!sb.toString().contains(position+"")) sb.append(position+"");
+                if(position == curPosition) dotView.stopShow();
             }
-        };
-        timer.schedule(timeTask,delayTime,delayTime);
+        });
+        addView(view);
+        if(delayTime != 0) {
+            TimerTask timeTask = new TimerTask() {
+                @Override
+                public void run() {
+                    if (!isTouched) handler.sendEmptyMessage(0x01);
+                }
+            };
+            new Timer().schedule(timeTask,delayTime,delayTime);
+        }
     }
 
     public AdView setAdUrlList(List<String> adUrlList) {
         this.adUrlList = adUrlList;
-        init();
+        return this;
+    }
+
+    public AdView setTitleList(List<String> titleList) {
+        this.titleList = titleList;
+        return this;
+    }
+
+    public AdView setTitleColor(int color) {
+        title.setTextColor(color);
+        return this;
+    }
+
+    public AdView setTitleSize(float size) {
+        title.setTextSize(size);
         return this;
     }
 
@@ -129,5 +159,9 @@ public class AdView extends FrameLayout {
 
     public interface OnItemClickListener {
         void onClick(int position);
+    }
+
+    public interface OnResourceReady {
+        void onResourceReady(int position);
     }
 }
