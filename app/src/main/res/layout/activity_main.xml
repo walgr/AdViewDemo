@@ -9,7 +9,6 @@
     <com.wpf.adview.AdView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        adview:scale="0.667"
         android:id="@+id/adView"/>
 
 </LinearLayout>
