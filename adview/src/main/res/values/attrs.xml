@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="AdViewCustom">
+        <attr name="scale" format="float"/>
+        <attr name="isInfiniteLoop" format="boolean"/>
+        <attr name="delayTime" format="integer"/>
+        <attr name="titleColor" format="color"/>
+        <attr name="dotColor" format="color"/>
+        <attr name="titleSize" format="float"/>
+        <attr name="scaleType" format="enum">
+            <enum name="matrix" value="0"/>
+            <enum name="fitXY" value="1"/>
+            <enum name="fitStart" value="2"/>
+            <enum name="fitCenter" value="3"/>
+            <enum name="fitEnd" value="4"/>
+            <enum name="center" value="5"/>
+            <enum name="centerCrop" value="6"/>
+            <enum name="centerInside" value="7"/>
+        </attr>
+        <attr name="showAnim" format="boolean"/>
+        <attr name="titleLocation" format="enum">
+            <enum name="topleft" value="0"/>
+            <enum name="topcenter_horizontal" value="1"/>
+            <enum name="topright" value="2"/>
+            <enum name="center_verticalleft" value="3"/>
+            <enum name="center" value="4"/>
+            <enum name="center_verticalright" value="5"/>
+            <enum name="bottomleft" value="6"/>
+            <enum name="bottomcenter_horizontal" value="7"/>
+            <enum name="bottomright" value="8"/>
+        </attr>
+        <attr name="dotViewLocation" format="enum">
+            <enum name="left" value="6"/>
+            <enum name="center" value="7"/>
+            <enum name="right" value="8"/>
+        </attr>
+    </declare-styleable>
+
+</resources>

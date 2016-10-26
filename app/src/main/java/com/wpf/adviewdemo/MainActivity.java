@@ -2,11 +2,13 @@ package com.wpf.adviewdemo;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.wpf.adview.AdView;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity implements
         AdView.OnPageChangeListener ,
@@ -34,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        AdView adView = (AdView) findViewById(R.id.adView);
+        final AdView adView = (AdView) findViewById(R.id.adView);
         adView.addOnPageChangeListener(this);
         adView.setOnItemClickListener(this);
         adView.setAdUrlList(adUrlList);
@@ -45,9 +47,11 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onPageSelected(int position) {
+
     }
 
     @Override
     public void onClick(int position) {
+        Log.e("点击",""+position);
     }
 }

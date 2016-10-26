@@ -23,11 +23,13 @@ import java.util.TimerTask;
 public class DotView extends View {
 
     private int width;
+    private int location;
     private int dotRadius,curDotRadius,oldDotRadius;
     private int allPoint;
     private int curPosition,oldPosition,lastPosition;
+    private int dotColor = Color.WHITE;
     private long delayTime = 100;
-    private boolean isReady,isRun;
+    private boolean isReady,isCanShow;
     private List<float[]> points = new ArrayList<>();
     private Paint mPaint = new Paint();
     private ValueAnimator valueAnimator;
@@ -58,9 +60,14 @@ public class DotView extends View {
 
     private void init() {
         mPaint.setStyle(Paint.Style.FILL);
-        mPaint.setColor(Color.WHITE);
+        mPaint.setColor(dotColor);
         mPaint.setAntiAlias(true);
         mPaint.setStrokeWidth(1);
+    }
+
+    public void reView() {
+        init();
+        invalidate();
     }
 
     @Override
@@ -87,13 +94,20 @@ public class DotView extends View {
             int dotSpace = 2 * dotRadius;
             for(int i = 0;i<allPoint;++i) {
                 float[] floats = new float[2];
-                floats[0] = width /2 + 2*(i-allPoint/2)*dotRadius + dotSpace * (i - allPoint/2);
+                floats[0] = getDotLeft() + 2*(i-allPoint/2)*dotRadius + dotSpace * (i - allPoint/2);
                 floats[1] = height /2;
                 points.add(floats);
             }
             timer.schedule(timeTask,delayTime,delayTime);
         }
         drawDot(canvas);
+    }
+
+    private int getDotLeft() {
+        if(location == 6) return 2*allPoint*dotRadius;
+        else if(location == 7) return width/2;
+        else if(location == 8) return width - 2*allPoint*dotRadius;
+        else return width/2;
     }
 
     private Timer timer = new Timer();
@@ -104,7 +118,8 @@ public class DotView extends View {
         }
     };
     public void show() {
-        isReady = false;
+//        isReady = false;
+        isReady = !isCanShow;
         lastPosition = curPosition;
         oldPosition = curPosition;
     }
@@ -138,8 +153,23 @@ public class DotView extends View {
 
     public void setCurPosition(int curPosition) {
         lastPosition = this.curPosition;
-        this.curPosition = curPosition % allPoint;
+        this.curPosition = allPoint != 0?curPosition % allPoint:0;
         if(valueAnimator != null && allPoint != 1) valueAnimator.start();
         invalidate();
+    }
+
+    public void setDotColor(int dotColor) {
+        this.dotColor = dotColor;
+        invalidate();
+    }
+
+    public void setLocation(int location) {
+        //6左 7中 8右
+        width = 0;
+        this.location = location;
+    }
+
+    public void setCanShow(boolean canShow) {
+        isCanShow = canShow;
     }
 }

@@ -28,14 +28,16 @@ public class AdFragment extends Fragment implements
 
     private int position;
     private String adUrl;
+    private ImageView.ScaleType scaleType = ImageView.ScaleType.FIT_CENTER;
     private AdView.OnItemClickListener onItemClickListener;
     private AdView.OnResourceReady onResourceReady;
 
-    public static AdFragment newInstance(int position,String adUrl) {
+    public static AdFragment newInstance(int position,String adUrl,ImageView.ScaleType scaleType) {
         AdFragment adFragment = new AdFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("Position",position);
         bundle.putString("AdUrl",adUrl);
+        bundle.putSerializable("ScaleType",scaleType);
         adFragment.setArguments(bundle);
         return adFragment;
     }
@@ -52,8 +54,10 @@ public class AdFragment extends Fragment implements
         super.onViewCreated(view, savedInstanceState);
         position = getArguments().getInt("Position");
         adUrl = getArguments().getString("AdUrl");
+        scaleType = (ImageView.ScaleType) getArguments().getSerializable("ScaleType");
         assert adUrl != null && !adUrl.isEmpty();
         ImageView imageView = (ImageView) view;
+        imageView.setScaleType(scaleType);
         Glide.with(getActivity()).load(adUrl)
 //                .placeholder(R.mipmap.loading)
 //                .crossFade()
