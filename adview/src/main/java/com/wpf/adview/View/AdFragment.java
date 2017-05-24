@@ -58,6 +58,7 @@ public class AdFragment extends Fragment implements
         assert adUrl != null && !adUrl.isEmpty();
         ImageView imageView = (ImageView) view;
         imageView.setScaleType(scaleType);
+
         Glide.with(getActivity()).load(adUrl)
 //                .placeholder(R.mipmap.loading)
 //                .crossFade()
@@ -75,6 +76,7 @@ public class AdFragment extends Fragment implements
                 })
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(imageView);
+
         imageView.setOnClickListener(this);
     }
 

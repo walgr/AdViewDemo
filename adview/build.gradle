@@ -3,13 +3,13 @@ apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.0'
+    compileSdkVersion 'android-O'
+    buildToolsVersion '26.0.0 rc2'
     defaultConfig {
         minSdkVersion 17
-        targetSdkVersion 25
+        targetSdkVersion 'O'
         versionCode 1
-        versionName "1.5"
+        versionName "1.7"
     }
     buildTypes {
         release {
@@ -23,12 +23,13 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:25.0.0'
+    compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.github.zhaokaiqiang.klog:library:1.6.0'
 }
 
 
-version = "1.6"
+version = "1.7"
 group = "com.wpf.adview"
 def siteUrl = 'https://github.com/wazsj/AdViewDemo'
 def gitUrl = 'https://github.com/wazsj/AdViewDemo.git'
@@ -73,7 +74,6 @@ task sourcesJar(type: Jar) {
 task javadoc(type: Javadoc) {
     source = android.sourceSets.main.java.srcDirs
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-//    classpath += project.files(configurations.compile.files,android.getBootClasspath().join(File.pathSeparator))
     options.encoding = "utf-8"
 }
 

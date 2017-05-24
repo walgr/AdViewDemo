@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final AdView adView = (AdView) findViewById(R.id.adView);
+        AdView adView = (AdView) findViewById(R.id.adView);
         adView.addOnPageChangeListener(this);
         adView.setOnItemClickListener(this);
         adView.setAdUrlList(adUrlList);

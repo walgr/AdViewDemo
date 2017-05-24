@@ -38,10 +38,17 @@ public class DotView extends View {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            if(msg.what == 0x01)
-                setCurPosition(curPosition + 1);
-            else if(msg.what == 0x02)
+            if(msg.what == 0x01) {
+                if(!isReady) setCurPosition(curPosition+1);
+            } else if(msg.what == 0x02)
                 setCurPosition(curPosition);
+        }
+    };
+    private Timer timer = new Timer();
+    private TimerTask timeTask = new TimerTask() {
+        @Override
+        public void run() {
+            handler.sendEmptyMessage(isReady?0x00:0x01);
         }
     };
 
@@ -80,7 +87,7 @@ public class DotView extends View {
             curDotRadius = dotRadius*3/2;
             oldDotRadius = dotRadius;
             valueAnimator = ValueAnimator.ofInt(dotRadius,dotRadius*3/2);
-            valueAnimator.setDuration(200);
+            valueAnimator.setDuration(delayTime);
             valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator valueAnimator) {
@@ -104,21 +111,14 @@ public class DotView extends View {
     }
 
     private int getDotLeft() {
+        //6左 7中 8右
         if(location == 6) return 2*allPoint*dotRadius;
         else if(location == 7) return width/2;
         else if(location == 8) return width - 2*allPoint*dotRadius;
         else return width/2;
     }
 
-    private Timer timer = new Timer();
-    private TimerTask timeTask = new TimerTask() {
-        @Override
-        public void run() {
-            handler.sendEmptyMessage(isReady?0x00:0x01);
-        }
-    };
     public void show() {
-//        isReady = false;
         isReady = !isCanShow;
         lastPosition = curPosition;
         oldPosition = curPosition;
@@ -167,6 +167,10 @@ public class DotView extends View {
         //6左 7中 8右
         width = 0;
         this.location = location;
+    }
+
+    public void setDelayTime(long delayTime) {
+        this.delayTime = delayTime;
     }
 
     public void setCanShow(boolean canShow) {

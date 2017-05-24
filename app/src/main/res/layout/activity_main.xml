@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:adview="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.wpf.adviewdemo.MainActivity">
 
     <com.wpf.adview.AdView
+        android:id="@+id/adView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/adView"/>
+        adview:delayTime="3000"
+        adview:pointText="点击退出"
+        adview:scale="0"
+        adview:showProgressBar="true" />
 
 </LinearLayout>
