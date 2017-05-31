@@ -8,7 +8,7 @@
         <attr name="delayTime_ViewPager" format="integer"/>
         <attr name="titleColor" format="color"/>
         <attr name="dotColor" format="color"/>
-        <attr name="titleSize" format="float"/>
+        <attr name="titleSize" format="dimension"/>
         <attr name="scaleType" format="enum">
             <enum name="matrix" value="0"/>
             <enum name="fitXY" value="1"/>
@@ -48,8 +48,8 @@
             <enum name="bottomright" value="8"/>
         </attr>
         <attr name="pointText" format="string"/>
+        <attr name="pointTextSize" format="dimension"/>
         <attr name="showProgressBar" format="boolean"/>
         <attr name="showDelayTime" format="boolean"/>
     </declare-styleable>
-
 </resources>

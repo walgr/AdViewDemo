@@ -10,7 +10,6 @@
         android:id="@+id/adView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        adview:delayTime="3000"
         adview:pointText="点击退出"
         adview:scale="0"
         adview:showProgressBar="true" />

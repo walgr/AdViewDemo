@@ -9,7 +9,7 @@ android {
         minSdkVersion 17
         targetSdkVersion 'O'
         versionCode 1
-        versionName "1.7"
+        versionName "1.8"
     }
     buildTypes {
         release {
@@ -29,7 +29,7 @@ dependencies {
 }
 
 
-version = "1.7"
+version = "1.8"
 group = "com.wpf.adview"
 def siteUrl = 'https://github.com/wazsj/AdViewDemo'
 def gitUrl = 'https://github.com/wazsj/AdViewDemo.git'

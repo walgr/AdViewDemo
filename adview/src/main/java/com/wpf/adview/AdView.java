@@ -10,6 +10,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,17 +66,45 @@ public class AdView extends FrameLayout implements
     private OnPageChangeListener onPageChangeListener;
     private List<String> adUrlList = new ArrayList<>();
     private List<String> titleList = new ArrayList<>();
-    private ImageView.ScaleType scaleType = ImageView.ScaleType.FIT_CENTER;
     private StringBuilder sb = new StringBuilder();
-    private int titleColor = Color.WHITE,dotColor = Color.WHITE;
-    private int delayTime_ViewPager = 3000,delayTime = 3000;
+    private boolean isStart,isTouched;
     private int curPosition = 0;
+
+    //轮播图图片显示效果
+    private ImageView.ScaleType scaleType = ImageView.ScaleType.FIT_CENTER;
+    //轮播图提示文字位置
+    private int titleLocation;
+    //轮播图小圆点位置
+    private int dotViewLocation;
+    //轮播图延迟按钮位置
+    private int delayControlLocation;
+    //轮播图提示文字大小
+    private float titleSize;
+    //轮播图提示文字颜色
+    private int titleColor = Color.WHITE;
+    //轮播图小圆点颜色
+    private int dotColor = Color.WHITE;
+    //轮播图显示比例
     private float scale = (float) 9/16;
-    private int titleLocation,dotViewLocation,delayControlLocation;
-    private float titleSize = 14;
-    private boolean isAutoSkip = true,isInfiniteLoop = true,isStart,isCanShow = true,
-            showProgressBar = true,showDelayTime = true;
+    //轮播图自动跳转
+    private boolean isAutoSkip = true;
+    //是否无线循环
+    private boolean isInfiniteLoop = true;
+    //轮播图位置跳转动画
+    private boolean showDotAnim = true;
+    //显示进度条
+    private boolean showProgressBar = true;
+    //显示延时时间
+    private boolean showDelayTime = true;
+    //提示短语
     private String pointText = "";
+    //提示短语文字大小
+    private float pointTextSize;
+    //轮播图跳转时间
+    private int delayTime_ViewPager = 3000;
+    //自动退出延时时间
+    private int delayTime = 3000;
+
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -83,7 +112,6 @@ public class AdView extends FrameLayout implements
             if(msg.what == 0x01) viewPager.setCurrentItem(viewPager.getCurrentItem()+1);
         }
     };
-    private boolean isTouched;
 
     public AdView(Context context) {
         this(context,null);
@@ -103,12 +131,17 @@ public class AdView extends FrameLayout implements
         delayTime_ViewPager = typedArray.getInt(R.styleable.AdView_delayTime_ViewPager,3000);
         titleColor = typedArray.getColor(R.styleable.AdView_titleColor,Color.WHITE);
         dotColor = typedArray.getColor(R.styleable.AdView_dotColor,Color.WHITE);
-        titleSize = typedArray.getFloat(R.styleable.AdView_titleSize,14);
+        titleSize = typedArray.getDimension(R.styleable.AdView_titleSize,
+                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14,
+                        getResources().getDisplayMetrics()));
         titleLocation = typedArray.getInt(R.styleable.AdView_titleLocation,7);
         dotViewLocation = typedArray.getInt(R.styleable.AdView_dotViewLocation,7);
-        isCanShow = typedArray.getBoolean(R.styleable.AdView_showDotAnim,true);
+        showDotAnim = typedArray.getBoolean(R.styleable.AdView_showDotAnim,true);
         delayControlLocation = typedArray.getInt(R.styleable.AdView_delayControlLocation,2);
         pointText = typedArray.getString(R.styleable.AdView_pointText);
+        pointTextSize = typedArray.getDimension(R.styleable.AdView_pointTextSize,
+                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14,
+                getResources().getDisplayMetrics()));
         showProgressBar = typedArray.getBoolean(R.styleable.AdView_showProgressBar,false);
         showDelayTime = typedArray.getBoolean(R.styleable.AdView_showDelayTime,true);
         delayTime = typedArray.getInt(R.styleable.AdView_delayTime,3000);
@@ -197,25 +230,26 @@ public class AdView extends FrameLayout implements
 
     private void initDotView() {
         title.setTextColor(titleColor);
-        title.setTextSize(titleSize);
+        title.setTextSize(TypedValue.COMPLEX_UNIT_PX,titleSize);
         title.setGravity(gGravityArray[titleLocation]);
         dotView.setPointNum(adUrlList.size());
         dotView.setCurPosition(curPosition);
         dotView.setDotColor(dotColor);
         dotView.setLocation(dotViewLocation);
-        dotView.setCanShow(isCanShow);
+        dotView.setShowDotAnim(showDotAnim);
         dotView.reView();
     }
 
     private void initDelayControlView() {
         delayControlView.setShowProgressBar(showProgressBar);
         if(!showProgressBar && !pointText.isEmpty())
-            delayControlView.setBackground(ContextCompat
+            delayControlView.getView().setBackground(ContextCompat
                     .getDrawable(getContext(),R.drawable.pointtextback));
         delayControlView.setPointText(pointText);
         delayControlView.setOnTimeOverListener(this);
         delayControlView.setDelayTime(delayTime);
         delayControlView.setShowDelayTime(showDelayTime);
+        delayControlView.setPointTextSize(pointTextSize);
         setDelayControlLocation(delayControlLocation);
     }
 
@@ -268,8 +302,8 @@ public class AdView extends FrameLayout implements
         isInfiniteLoop = infiniteLoop;
     }
 
-    public void setCanShow(boolean canShow) {
-        isCanShow = canShow;
+    public void setShowDotAnim(boolean showDotAnim) {
+        this.showDotAnim = showDotAnim;
     }
 
     public void setShowProgressBar(boolean showProgressBar) {
@@ -287,7 +321,7 @@ public class AdView extends FrameLayout implements
 
     @Override
     public void timeOver() {
-//        delayControlView.performClick();
+        delayControlView.getView().performClick();
     }
 
     public void setPointText(String pointText) {

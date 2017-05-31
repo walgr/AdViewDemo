@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,6 +19,7 @@ import com.wpf.adviewpager.R;
 public class DelayControlView extends LinearLayout implements
         View.OnClickListener {
 
+    private View view;
     private TextView delayText;
     private DelayView delayView;
 
@@ -35,11 +37,13 @@ public class DelayControlView extends LinearLayout implements
     }
 
     private void initView() {
-        View view = View.inflate(getContext(), R.layout.delayview,null);
-        delayText = (TextView) view.findViewById(R.id.delayText);
-        delayView = (DelayView) view.findViewById(R.id.delayView);
-        view.setOnClickListener(this);
-        addView(view);
+        if(view == null) {
+            view = View.inflate(getContext(), R.layout.delayview, null);
+            delayText = (TextView) view.findViewById(R.id.delayText);
+            delayView = (DelayView) view.findViewById(R.id.delayView);
+            view.setOnClickListener(this);
+            addView(view);
+        }
     }
 
     @Override
@@ -49,6 +53,10 @@ public class DelayControlView extends LinearLayout implements
 
     private AppCompatActivity getActivity() {
         return (AppCompatActivity) getContext();
+    }
+
+    public View getView() {
+        return view;
     }
 
     public void setOnTimeOverListener(DelayView.OnTimeOverListener onTimeOverListener) {
@@ -70,5 +78,9 @@ public class DelayControlView extends LinearLayout implements
 
     public void setDelayTime(int delayTime) {
         delayView.setDelayTime(delayTime);
+    }
+
+    public void setPointTextSize(float pointTextSize) {
+        delayText.setTextSize(TypedValue.COMPLEX_UNIT_PX,pointTextSize);
     }
 }

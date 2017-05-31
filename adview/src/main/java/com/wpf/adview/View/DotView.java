@@ -29,7 +29,7 @@ public class DotView extends View {
     private int curPosition,oldPosition,lastPosition;
     private int dotColor = Color.WHITE;
     private long delayTime = 100;
-    private boolean isReady,isCanShow;
+    private boolean isReady, showDotAnim;
     private List<float[]> points = new ArrayList<>();
     private Paint mPaint = new Paint();
     private ValueAnimator valueAnimator;
@@ -119,7 +119,7 @@ public class DotView extends View {
     }
 
     public void show() {
-        isReady = !isCanShow;
+        isReady = !showDotAnim;
         lastPosition = curPosition;
         oldPosition = curPosition;
     }
@@ -173,7 +173,7 @@ public class DotView extends View {
         this.delayTime = delayTime;
     }
 
-    public void setCanShow(boolean canShow) {
-        isCanShow = canShow;
+    public void setShowDotAnim(boolean showDotAnim) {
+        this.showDotAnim = showDotAnim;
     }
 }
