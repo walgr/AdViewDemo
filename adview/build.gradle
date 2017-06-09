@@ -9,7 +9,7 @@ android {
         minSdkVersion 17
         targetSdkVersion 'O'
         versionCode 1
-        versionName "1.8"
+        versionName "2.0"
     }
     buildTypes {
         release {
@@ -29,7 +29,7 @@ dependencies {
 }
 
 
-version = "1.8"
+version = "2.0"
 group = "com.wpf.adview"
 def siteUrl = 'https://github.com/wazsj/AdViewDemo'
 def gitUrl = 'https://github.com/wazsj/AdViewDemo.git'
@@ -66,6 +66,14 @@ install {
     }
 }
 
+// 生成jar包
+task releaseJar(type: Copy) {
+    from('build/intermediates/bundles/release')
+    into('../jar')
+    include('classes.jar')
+    rename('classes.jar', 'okgo-' + version + '.jar')
+}
+
 task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
     classifier = 'sources'
@@ -74,12 +82,18 @@ task sourcesJar(type: Jar) {
 task javadoc(type: Javadoc) {
     source = android.sourceSets.main.java.srcDirs
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    options.encoding = "utf-8"
+    options {
+        encoding "UTF-8"
+        charSet 'UTF-8'
+        author true
+        version true
+    }
+    failOnError false
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
-    from javadoc.destinationDir
+    from javadoc.getDestinationDir()
 }
 
 artifacts {

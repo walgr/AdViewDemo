@@ -10,24 +10,12 @@
         android:layout_height="match_parent"/>
 
     <LinearLayout
+        android:id="@+id/indicatorView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="bottom"
         android:orientation="vertical"
         android:padding="8dp">
-
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginBottom="8dp"
-            android:layout_weight="1"
-            android:maxLines="1" />
-
-        <com.wpf.adview.View.DotView
-            android:id="@+id/dorView"
-            android:layout_width="wrap_content"
-            android:layout_height="16dp" />
 
     </LinearLayout>
 

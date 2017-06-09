@@ -1,14 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="AdView">
+        <attr name="pageTransformerType" format="enum">
+            <enum name="Default" value="0"/>
+            <enum name="Accordion" value="1"/>
+            <enum name="BackgroundToForeground" value="2"/>
+            <enum name="CubeIn" value="3"/>
+            <enum name="CubeOut" value="4"/>
+            <enum name="Drawer" value="5"/>
+            <enum name="DepthPage" value="6"/>
+            <enum name="FlipHorizontal" value="7"/>
+            <enum name="FlipVertical" value="8"/>
+            <enum name="ForegroundToBackground" value="9"/>
+            <enum name="RotateDown" value="10"/>
+            <enum name="RotateUp" value="11"/>
+            <enum name="ScaleInOut" value="12"/>
+            <enum name="Stack" value="13"/>
+            <enum name="Tablet" value="14"/>
+            <enum name="ZoomIn" value="15"/>
+            <enum name="ZoomOutSlide" value="16"/>
+            <enum name="ZoomOut" value="17"/>
+        </attr>
         <attr name="scale" format="float"/>
-        <attr name="isInfiniteLoop" format="boolean"/>
-        <attr name="isAutoSkip" format="boolean"/>
-        <attr name="delayTime" format="integer"/>
-        <attr name="delayTime_ViewPager" format="integer"/>
-        <attr name="titleColor" format="color"/>
-        <attr name="dotColor" format="color"/>
-        <attr name="titleSize" format="dimension"/>
         <attr name="scaleType" format="enum">
             <enum name="matrix" value="0"/>
             <enum name="fitXY" value="1"/>
@@ -19,7 +32,10 @@
             <enum name="centerCrop" value="6"/>
             <enum name="centerInside" value="7"/>
         </attr>
-        <attr name="showDotAnim" format="boolean"/>
+        <attr name="isInfiniteLoop" format="boolean"/>
+        <attr name="isAutoSkip" format="boolean"/>
+        <attr name="titleColor" format="color"/>
+        <attr name="titleSize" format="dimension"/>
         <attr name="titleLocation" format="enum">
             <enum name="topleft" value="0"/>
             <enum name="topcenter_horizontal" value="1"/>
@@ -31,6 +47,9 @@
             <enum name="bottomcenter_horizontal" value="7"/>
             <enum name="bottomright" value="8"/>
         </attr>
+        <attr name="showIndicator" format="boolean"/>
+        <attr name="dotColor" format="color"/>
+        <attr name="showDotAnim" format="boolean"/>
         <attr name="dotViewLocation" format="enum">
             <enum name="left" value="6"/>
             <enum name="center" value="7"/>
@@ -47,6 +66,8 @@
             <enum name="bottomcenter_horizontal" value="7"/>
             <enum name="bottomright" value="8"/>
         </attr>
+        <attr name="delayTime" format="integer"/>
+        <attr name="delayTime_ViewPager" format="integer"/>
         <attr name="pointText" format="string"/>
         <attr name="pointTextSize" format="dimension"/>
         <attr name="showProgressBar" format="boolean"/>
