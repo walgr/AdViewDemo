@@ -420,6 +420,10 @@ public class AdView extends FrameLayout implements
         this.pageTransformerType = pageTransformerType;
     }
 
+    public ViewPager getViewPager() {
+        return viewPager;
+    }
+
     @Override
     public void timeOver() {
         delayControlView.getView().performClick();
