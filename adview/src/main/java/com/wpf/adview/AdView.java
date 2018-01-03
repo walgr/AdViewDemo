@@ -44,6 +44,7 @@ import com.wpf.adview.View.IndicatorView;
 import com.wpf.adviewpager.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -104,6 +105,8 @@ public class AdView extends FrameLayout implements
     private OnPageChangeListener onPageChangeListener;
     private List<String> adUrlList = new ArrayList<>();
     private List<String> titleList = new ArrayList<>();
+    @SuppressLint("UseSparseArrays")
+    private HashMap<Integer,View> addViewMap = new HashMap<>();
     private StringBuilder sb = new StringBuilder();
     private boolean isStart,isTouched;
     private int curPosition = 0;
@@ -239,7 +242,7 @@ public class AdView extends FrameLayout implements
 
     private void initViewPager() {
         final AdAdapter adAdapter = new AdAdapter(((AppCompatActivity)getContext())
-                .getSupportFragmentManager(), adUrlList,scaleType,isInfiniteLoop);
+                .getSupportFragmentManager(), adUrlList,addViewMap,scaleType,isInfiniteLoop);
         viewPager.setAdapter(adAdapter);
         viewPager.setPageTransformer(true,pageTransformerType);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -418,6 +421,14 @@ public class AdView extends FrameLayout implements
 
     public void setPageTransformerType(ViewPager.PageTransformer pageTransformerType) {
         this.pageTransformerType = pageTransformerType;
+    }
+
+    public void addViewToFragment(int position,View view) {
+        addViewMap.put(position,view);
+    }
+
+    public HashMap<Integer, View> getAddViewMap() {
+        return addViewMap;
     }
 
     public ViewPager getViewPager() {

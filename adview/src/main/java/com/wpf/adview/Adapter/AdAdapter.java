@@ -1,15 +1,18 @@
 package com.wpf.adview.Adapter;
 
+import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.wpf.adview.View.AdFragment;
 import com.wpf.adview.AdView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -23,23 +26,19 @@ public class AdAdapter extends FragmentPagerAdapter {
     private static boolean isInfiniteLoop = true;
     private ImageView.ScaleType scaleType = ImageView.ScaleType.FIT_CENTER;
     private List<String> adUrlList = new ArrayList<>();
+    @SuppressLint("UseSparseArrays")
+    private HashMap<Integer,View> addViewMap = new HashMap<>();
     private AdView.OnItemClickListener onItemClickListener;
     private AdView.OnResourceReady onResourceReady;
 
     public AdAdapter(FragmentManager fm, @NonNull List<String> adUrlList,
+                     HashMap<Integer,View> addViewMap,
                      ImageView.ScaleType scaleType,boolean isInfiniteLoop) {
         super(fm);
         this.adUrlList = adUrlList;
         this.scaleType = scaleType;
+        this.addViewMap = addViewMap;
         AdAdapter.isInfiniteLoop = isInfiniteLoop;
-    }
-
-    @Override
-    public Fragment getItem(int position) {
-        position = getCurPosition(position,adUrlList.size());
-        return AdFragment.newInstance(position,adUrlList.get(position),scaleType)
-                .setOnResourceReady(onResourceReady)
-                .setOnItemClickListener(onItemClickListener);
     }
 
     public static int getCurPosition(int position, int adUrlListSize) {
@@ -48,6 +47,15 @@ public class AdAdapter extends FragmentPagerAdapter {
         if((position-max/2)%adUrlListSize>=0) curPosition = (position-max/2)%adUrlListSize;
         else curPosition = adUrlListSize - (max/2-position)%adUrlListSize;
         return curPosition;
+    }
+
+    @Override
+    public Fragment getItem(int position) {
+        position = getCurPosition(position,adUrlList.size());
+        return AdFragment.newInstance(position,adUrlList.get(position),
+                scaleType,addViewMap.get(position))
+                .setOnResourceReady(onResourceReady)
+                .setOnItemClickListener(onItemClickListener);
     }
 
     @Override

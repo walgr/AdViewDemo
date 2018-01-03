@@ -3,6 +3,8 @@ package com.wpf.adviewdemo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import com.wpf.adview.AdView;
 
@@ -36,11 +38,22 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        View addView = View.inflate(this,R.layout.add_view,null);
+        Button button = addView.findViewById(R.id.btn);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("--","点击");
+            }
+        });
+
         AdView adView = (AdView) findViewById(R.id.adView);
         adView.addOnPageChangeListener(this);
         adView.setOnItemClickListener(this);
         adView.setAdUrlList(adUrlList);
         adView.setTitleList(titleList);
+        adView.setAutoSkip(false);
+        adView.addViewToFragment(2,addView);
         adView.start();
     }
 

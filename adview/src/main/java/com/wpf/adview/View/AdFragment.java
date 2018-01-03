@@ -3,11 +3,14 @@ package com.wpf.adview.View;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -18,11 +21,14 @@ import com.bumptech.glide.request.target.Target;
 import com.wpf.adview.AdView;
 import com.wpf.adviewpager.R;
 
+import java.util.HashMap;
+
 
 /**
  * 广告View
  */
 
+@SuppressLint("ValidFragment")
 public class AdFragment extends Fragment implements
         View.OnClickListener {
 
@@ -31,9 +37,16 @@ public class AdFragment extends Fragment implements
     private ImageView.ScaleType scaleType = ImageView.ScaleType.FIT_CENTER;
     private AdView.OnItemClickListener onItemClickListener;
     private AdView.OnResourceReady onResourceReady;
+    private View addView;
 
-    public static AdFragment newInstance(int position,String adUrl,ImageView.ScaleType scaleType) {
-        AdFragment adFragment = new AdFragment();
+    public AdFragment(View view) {
+        this.addView = view;
+    }
+
+    public static AdFragment newInstance(int position, String adUrl,
+                                         ImageView.ScaleType scaleType,
+                                         View addView) {
+        AdFragment adFragment = new AdFragment(addView);
         Bundle bundle = new Bundle();
         bundle.putInt("Position",position);
         bundle.putString("AdUrl",adUrl);
@@ -45,18 +58,33 @@ public class AdFragment extends Fragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_ad, container, false);
+        View view = inflater.inflate(R.layout.fragment_ad, container, false);
+        FrameLayout frameLayout = new FrameLayout(container.getContext());
+        frameLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
+        frameLayout.addView(view);
+        return frameLayout;
     }
 
     @SuppressLint("Assert")
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        position = getArguments().getInt("Position");
-        adUrl = getArguments().getString("AdUrl");
-        scaleType = (ImageView.ScaleType) getArguments().getSerializable("ScaleType");
+        Bundle bundle = getArguments();
+        if(bundle != null) {
+            position = bundle.getInt("Position");
+            adUrl = bundle.getString("AdUrl");
+            scaleType = (ImageView.ScaleType) bundle.getSerializable("ScaleType");
+        }
+        if(addView != null) {
+            View parentView = (View) addView.getParent();
+            if(parentView instanceof FrameLayout) {
+                ((FrameLayout) parentView).removeView(addView);
+            }
+            ((FrameLayout)view).addView(addView);
+        }
         assert adUrl != null && !adUrl.isEmpty();
-        ImageView imageView = (ImageView) view;
+        ImageView imageView = view.findViewById(R.id.image);
         imageView.setScaleType(scaleType);
 
         Glide.with(getActivity()).load(adUrl)
@@ -78,6 +106,12 @@ public class AdFragment extends Fragment implements
                 .into(imageView);
 
         imageView.setOnClickListener(this);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
     }
 
     @Override
