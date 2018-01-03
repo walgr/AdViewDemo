@@ -1,5 +1,6 @@
 package com.wpf.adview;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
@@ -94,7 +95,7 @@ public class AdView extends FrameLayout implements
             new TabletTransformer(),
             new ZoomInTransformer(),
             new ZoomOutSlideTransformer(),
-            new ZoomOutTransformer()
+            new ZoomOutTransformer(),
     };
     private ViewPager viewPager;
     private LinearLayout indicatorView;
@@ -148,6 +149,7 @@ public class AdView extends FrameLayout implements
     //自动退出延时时间
     private int delayTime = 3000;
 
+    @SuppressLint("HandlerLeak")
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -198,9 +200,9 @@ public class AdView extends FrameLayout implements
     private void initView() {
         View view = LayoutInflater.from(getContext())
                 .inflate(R.layout.adview,this,false);
-        viewPager = (ViewPager) view.findViewById(R.id.viewPager);
+        viewPager = view.findViewById(R.id.viewPager);
         indicatorView = view.findViewById(R.id.indicatorView);
-        delayControlView = (DelayControlView) view.findViewById(R.id.delayView);
+        delayControlView = view.findViewById(R.id.delayView);
         addView(view);
     }
 

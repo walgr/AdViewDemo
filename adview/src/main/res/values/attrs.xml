@@ -20,6 +20,7 @@
             <enum name="ZoomIn" value="15"/>
             <enum name="ZoomOutSlide" value="16"/>
             <enum name="ZoomOut" value="17"/>
+            <enum name="Gallery" value="18"/>
         </attr>
         <attr name="scale" format="float"/>
         <attr name="scaleType" format="enum">
